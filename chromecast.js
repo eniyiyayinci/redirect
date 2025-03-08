@@ -237,7 +237,7 @@
                         var e = document.createElement("script");
                         e.setAttribute("type", "text/javascript"),
                         e.setAttribute("async", "async"),
-                        e.setAttribute("src", "https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"),
+                        e.setAttribute("src", "https://cdn.jsdelivr.net/gh/volegol/taraftariuminfo@refs/heads/main/cast_sender.js"),
                         e.onload = function() {
                             return t.bootstrapCastApi()
                         }
