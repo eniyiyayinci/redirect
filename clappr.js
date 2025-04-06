@@ -1,13 +1,12 @@
 var _____WB$wombat$assign$function_____ = function(name) {
   return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name];
 };
-if (!self.__WB_pmw) { 
+if (!self.__WB_pmw) {
   self.__WB_pmw = function(obj) {
     this.__WB_source = obj;
     return this;
   };
 }
-
 {
   let window = _____WB$wombat$assign$function_____("window");
   let self = _____WB$wombat$assign$function_____("self");
@@ -18,10 +17,15 @@ if (!self.__WB_pmw) {
   let frames = _____WB$wombat$assign$function_____("frames");
   let opener = _____WB$wombat$assign$function_____("opener");
 
-  (function($){
-    $(window.document).ready(function(){
-      var autoPlay = true, chromeless = false, skipCounter, skipInterval, skipOffset, skipText;
-      if(Clappr.Browser.isMobile) {
+  (function($) {
+    $(window.document).ready(function() {
+      var autoPlay = false,
+        chromeless = false,
+        skipCounter,
+        skipInterval,
+        skipOffset,
+        skipText;
+      if (Clappr.Browser.isMobile) {
         autoPlay = false;
         chromeless = false;
       }
@@ -35,7 +39,10 @@ if (!self.__WB_pmw) {
             return window.app.clappr.instance.core.mediaControl.container.buffering;
           },
           resizeCallback: function() {
-            $('div[data-player]').css({ width: $(window).innerWidth() + 'px', height: $(window).innerHeight() + 'px' });
+            $('div[data-player]').css({
+              width: $(window).innerWidth() + 'px',
+              height: $(window).innerHeight() + 'px'
+            });
           },
           options: {
             autoPlay: autoPlay,
@@ -46,21 +53,32 @@ if (!self.__WB_pmw) {
             strings: {
               "tr-TR": {
                 back_to_live: "Canlı yayına geri dön",
-                live: "Canlı | TRGoals",
-                playback_not_supported: "Bir problem oldu! Bir kaç saniye sonra tekrar deneyin!"
+                live: "Canlı | YAYIN",
+                playback_not_supported: "Tarayıcınız bu ortamı oynatamıyor, lütfen güncel bir tarayıcı ile deneyiniz."
               }
-            }
+            },
+            width: '100%',
+            height: $(window).innerHeight()
           }
         },
         extend: function(defaults, options) {
           return $.extend({}, defaults, options);
         },
         init: function() {
-          $(window.document.head).append("<style>body{background-color:transparent;" + "font-family:\"Roboto\";overflow:hidden}" + "video{object-fit:fill}</style>");
-          window.config = window.app.extend({
-            adv: { enabled: false }
-          }, window.config);
-          if(window.config.adv.enabled) {
+          $(window.document.head).append(
+            "<style>body{background-color:transparent;" +
+              'font-family:"Roboto";overflow:hidden}' +
+              "video{object-fit:fill}</style>"
+          );
+          window.config = window.app.extend(
+            {
+              adv: {
+                enabled: false
+              }
+            },
+            window.config
+          );
+          if (window.config.adv.enabled) {
             window.app.initAdv();
           } else {
             window.app.initMatch();
@@ -69,14 +87,21 @@ if (!self.__WB_pmw) {
         },
         initAdv: function() {
           window.app.initContainer(window.config.adv.parentId);
-          window.config.adv = window.app.extend({
-            link: "",
-            skipOffset: 5,
-            skipText: "Reklami gec",
-            skipTextN: "Reklami gecmek icin %d saniye kaldı",
-            playback: { playInline: true }
-          }, window.config.adv);
-          window.app.clappr.instance = new Clappr.Player(window.app.extend(window.app.clappr.options, window.app.extend(window.config.adv, { chromeless: chromeless })));
+          window.config.adv = window.app.extend(
+            {
+              link: "",
+              skipOffset: 5,
+              skipText: "Reklamı geç",
+              skipTextN: "Reklamı geçmek için %d saniye kaldı",
+              playback: {
+                playInline: true
+              }
+            },
+            window.config.adv
+          );
+          window.app.clappr.instance = new Clappr.Player(
+            window.app.extend(window.app.clappr.options, window.app.extend(window.config.adv, { chromeless: chromeless }))
+          );
           window.app.initAdvEvents();
         },
         initAdvEvents: function() {
@@ -110,11 +135,47 @@ if (!self.__WB_pmw) {
         initSkipButton: function() {
           skipOffset = window.config.adv.skipOffset;
           if (!Clappr.Browser.isMobile) {}
-          $(window.document.body).prepend($("<div data-adv-link />").css({ height: "100%", left: 0, position: "absolute", top: 0, "z-index": 9998, width: "100%" }));
-          $("[data-adv-link]").append($("<a />").attr({ href: window.config.adv.link, target: "_blank" }).css({ display: "inline-block", height: "100%", width: "100%" }));
-          $(window.document.body).prepend($("<div data-adv />").css({ bottom: "25%", position: "absolute", right: 0, "z-index": 9999 }));
+          $(window.document.body).prepend(
+            $("<div data-adv-link />").css({
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              "z-index": 9998,
+              width: "100%"
+            })
+          );
+          $("[data-adv-link]").append(
+            $("<a />")
+              .attr({
+                href: window.config.adv.link,
+                target: "_blank"
+              })
+              .css({ display: "inline-block", height: "100%", width: "100%" })
+          );
+          $(window.document.body).prepend(
+            $("<div data-adv />").css({
+              bottom: "25%",
+              position: "absolute",
+              right: 0,
+              "z-index": 9999
+            })
+          );
           skipText = window.config.adv.skipTextN.replace("%d", window.config.adv.skipOffset).toUpperCase();
-          $("[data-adv]").append($("<button />").attr("type", "button").css({ "background-color": "#000", border: "3px solid #333", "border-right": 0, color: "#f8f8f8", "font-family": "Roboto", "font-weight": "bold", padding: "10px 20px" }).text(skipText));
+          $("[data-adv]").append(
+            $("<button />")
+              .attr("type", "button")
+              .css({
+                "background-color": "#000",
+                border: "3px solid #333",
+                "border-right": 0,
+                color: "#f8f8f8",
+                "font-family": "Roboto",
+                "font-weight": "bold",
+                padding: "10px 20px"
+              })
+              .text(skipText)
+          );
         },
         skip: function() {
           $("[data-adv]").remove();
@@ -140,8 +201,8 @@ if (!self.__WB_pmw) {
           } else {
             skipText = window.config.adv.skipTextN.replace("%d", skipOffset - skipCounter);
             skipCounter++;
-            $("[data-adv] > button").text(skipText.toUpperCase());
           }
+          $("[data-adv] > button").text(skipText.toUpperCase());
         }
       };
       window.app.init();
